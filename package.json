@@ -1,0 +1,29 @@
+{
+  "name": "edge-cache",
+  "version": "1.0.0",
+  "description": "FlightStats Edge Cache Library",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/flightstats/edge-cache.git"
+  },
+  "devDependencies": {
+    "chai": "latest",
+    "grunt": "latest",
+    "grunt-cafe-mocha": "latest",
+    "grunt-contrib-clean": "latest",
+    "grunt-env": "latest",
+    "grunt-exec": "latest",
+    "karma": "latest",
+    "karma-coverage": "latest",
+    "load-grunt-tasks": "latest",
+    "mocha": "latest"
+  },
+  "dependencies": {
+    "memcached": "latest",
+    "promise": "latest"
+  }
+}
