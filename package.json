@@ -10,6 +10,17 @@
     "type": "git",
     "url": "git://github.com/flightstats/edge-cache.git"
   },
+  "keywords": [
+    "memcached", "promises"
+  ],
+  "author": {
+    "name": "FlightStats"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/flightstats/memcached-promisify/issues"
+  },
+  "homepage": "https://github.com/flightstats/memcached-promisify",
   "devDependencies": {
     "chai": "latest",
     "grunt": "latest",
