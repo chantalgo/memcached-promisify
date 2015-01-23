@@ -1,7 +1,7 @@
 {
-  "name": "edge-cache",
+  "name": "memcache-promisify",
   "version": "1.0.0",
-  "description": "FlightStats Edge Cache Library",
+  "description": "FlightStats memcached promisified wrapper library",
   "main": "index.js",
   "scripts": {
     "test": "grunt test"

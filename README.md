@@ -1,6 +1,6 @@
-# Edge Cache
+# memcached-promisify
 
-Memcached promisified wrapper library
+FlightStats memcached promisified wrapper library
 
 ## Dev Requirements
 
