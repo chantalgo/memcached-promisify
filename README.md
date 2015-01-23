@@ -42,8 +42,8 @@ cache.set('foo', 'bar', 20)
 
 One and/or both of the following can be passed when instantiating:
 
-1) key prefix\r
-2) memcached options (see https://www.npmjs.com/package/memcached#options)
+* key prefix
+* memcached options (see https://www.npmjs.com/package/memcached#options)
 
 The latter also can be extended to set a 'cacheHost' (for example, an Elasticache host).
 Otherwise, localhost:11211 is used by default.
