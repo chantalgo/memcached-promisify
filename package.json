@@ -1,5 +1,5 @@
 {
-  "name": "memcache-promisify",
+  "name": "memcached-promisify",
   "version": "1.0.0",
   "description": "FlightStats memcached promisified wrapper library",
   "main": "index.js",
