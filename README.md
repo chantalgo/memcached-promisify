@@ -51,5 +51,5 @@ Otherwise, localhost:11211 is used by default.
 ```shell
 var mp = require('memcached-promisify');
 var cache1 = new mp.Cache('prefix'); // uses localhost:11211
-var cache2 = new mp.Cache('prefix', { cacheHost: 'other.host.com' }); // specific cache host
+var cache2 = new mp.Cache('prefix', 'other.host.com'); // specific cache host
 ```
