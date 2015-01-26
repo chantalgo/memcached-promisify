@@ -8,9 +8,9 @@ var logger = console;
 var cacheHostInstances = {};
 var MAX_EXPIRATION = 2592000;  // memcached's max exp in seconds (30 days)
 
-function Cache(keyPrefix, options) {
+function Cache(keyPrefix, cacheHost, options) {
   this.keyPrefix = keyPrefix || '';
-  this.cacheHost = (options && options.hasOwnProperty('cacheHost')) ? options.cacheHost : 'localhost:11211';
+  this.cacheHost = cacheHost || 'localhost:11211';
 
   if (!cacheHostInstances.hasOwnProperty(this.cacheHost)) {
     logger.log('creating memcached instance for cache host: ', this.cacheHost);
