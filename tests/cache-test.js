@@ -99,13 +99,22 @@ describe('cache', function() {
         });
     });
 
+    it('should return undefined if attempting to get something that does not exist', function(done) {
+      var keyName = 'test-' + Date.now().toString();
+      cache.get(keyName)
+        .then(function (getResult) {
+          expect(getResult).to.be.undefined;
+          done();
+        });
+    });
+
     it('should return false if attempting to del something that does not exist', function(done) {
       var keyName = 'test-' + Date.now().toString();
       cache.del(keyName)
         .then(function (delResult) {
           expect(delResult).to.be.false;
           done();
-        })
+        });
     });
   });
 
