@@ -1,6 +1,6 @@
 {
   "name": "memcached-promisify",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Memcached promisified wrapper library",
   "main": "index.js",
   "scripts": {
