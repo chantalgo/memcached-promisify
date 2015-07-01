@@ -2,28 +2,13 @@
 
 Memcached promisified wrapper library
 
-## Dev Requirements
+## installation
 
-[Node.js](http://nodejs.org/download/)
-
-[grunt](http://gruntjs.com/)
 ```shell
-$ npm install -g grunt-cli
+npm install memcached-promisify --save
 ```
 
-## Dev Setup
-```shell
-$ npm install
-```
-
-## Grunt Tasks
-
-Run tests
-```shell
-$ grunt
-```
-
-## Example Usage
+## usage
 ```shell
 var mp = require('memcached-promisify');
 var cache = new mp.Cache();
@@ -38,7 +23,7 @@ cache.set('foo', 'bar', 20)
     });
 ```
 
-## Options
+## options
 
 One and/or both of the following can be passed when instantiating:
 
@@ -50,4 +35,11 @@ One and/or both of the following can be passed when instantiating:
 var mp = require('memcached-promisify');
 var cache1 = new mp.Cache('prefix'); // uses localhost:11211
 var cache2 = new mp.Cache('prefix', 'other.host.com'); // specific cache host
+```
+
+## tests
+
+Run the tests
+```shell
+grunt test
 ```
