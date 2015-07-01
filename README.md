@@ -1,6 +1,6 @@
 # memcached-promisify
 
-FlightStats memcached promisified wrapper library
+Memcached promisified wrapper library
 
 ## Dev Requirements
 
