@@ -1,7 +1,7 @@
 {
   "name": "memcached-promisify",
   "version": "1.0.2",
-  "description": "FlightStats memcached promisified wrapper library",
+  "description": "Memcached promisified wrapper library",
   "main": "index.js",
   "scripts": {
     "test": "grunt test"
