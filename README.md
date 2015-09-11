@@ -10,10 +10,9 @@ npm install memcached-promisify --save
 
 ## usage
 ```shell
-var mp = require('memcached-promisify');
-var cache = new mp.Cache();
-// OR...
-var cache = new (require('memcached-promisify').Cache)();
+var Cache = require('memcached-promisify');
+
+var cache = new Cache();
 
 cache.set('foo', 'bar', 20)
     .then(function (result) {
@@ -25,16 +24,19 @@ cache.set('foo', 'bar', 20)
 
 ## options
 
-One and/or both of the following can be passed when instantiating:
+The following can be passed when instantiating:
 
-* cache key prefix
-* cache host (for example, an Elasticache host, or defaults to localhost:11211)
+* an object with a cache key prefix and the cache host URL, both optional
 * memcached options (see https://www.npmjs.com/package/memcached#options)
 
 ```shell
-var mp = require('memcached-promisify');
-var cache1 = new mp.Cache('prefix'); // uses localhost:11211
-var cache2 = new mp.Cache('prefix', 'other.host.com'); // specific cache host
+var Cache = require('memcached-promisify');
+
+// uses cache host at localhost:11211 by default
+var cache1 = new Cache({ 'keyPrefix': 'prefix' });
+
+// specific cache host
+var cache2 = new Cache({ 'keyPrefix': 'prefix', 'cacheHost': 'other.host.com' });
 ```
 
 ## tests
