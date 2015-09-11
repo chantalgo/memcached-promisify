@@ -1,35 +1,29 @@
 'use strict';
 
-process.env.NODE_ENV = 'test';
+var expect = require('chai').expect;
+var rewire = require('rewire');
+var Cache = rewire('../index.js');
 
-var Cache = require('../').Cache;
-var chai = require('chai');
-var assert = chai.assert;
-var expect = chai.expect;
+/*
+ * cache mockers
+ */
+function MockCacheRejected(host, options) {}
+MockCacheRejected.prototype.get = function (key, cb) {
+  return cb('Test get rejection');
+};
+MockCacheRejected.prototype.set = function (key, value, exp, cb) {
+  return cb('Test set rejection');
+};
 
 describe('cache', function() {
-  var cache = new Cache('test');
+  var cache = new Cache({ keyPrefix: 'test' }, { maxExpiration: 900 });
 
-  describe('methods', function() {
-    it('should have the method get', function() {
-      expect(cache).to.respondTo('get');
-    });
-
-    it('should have the method utilGet', function() {
-      expect(cache).to.respondTo('utilGet');
-    });
-
-    it('should have the method getMulti', function() {
-      expect(cache).to.respondTo('getMulti');
-    });
-
-    it('should have the method set', function() {
-      expect(cache).to.respondTo('set');
-    });
-
-    it('should have the method del', function() {
-      expect(cache).to.respondTo('del');
-    });
+  it('should have various methods', function(){
+    expect(cache).to.respondTo('get');
+    expect(cache).to.respondTo('utilGet');
+    expect(cache).to.respondTo('getMulti');
+    expect(cache).to.respondTo('set');
+    expect(cache).to.respondTo('del');
   });
 
   describe('execute methods', function() {
@@ -87,14 +81,11 @@ describe('cache', function() {
         .then(function (delResult) {
           return cache.get('foo');
         }, function (delError) {
-          console.error(delError);
           throw delError;
         })
         .then(function (getResult) {
-          assert(!getResult);
           done();
         }, function (getError) {
-          console.error(getError);
           throw getError;
         });
     });
@@ -103,8 +94,9 @@ describe('cache', function() {
       var keyName = 'test-' + Date.now().toString();
       cache.get(keyName)
         .then(function (getResult) {
-          expect(getResult).to.be.undefined;
           done();
+        }, function (getError) {
+          throw getError;
         });
     });
 
@@ -112,20 +104,49 @@ describe('cache', function() {
       var keyName = 'test-' + Date.now().toString();
       cache.del(keyName)
         .then(function (delResult) {
-          expect(delResult).to.be.false;
           done();
+        }, function (delError) {
+          throw delError;
         });
     });
-  });
 
-  describe('assertions', function() {
     it('should limit the expiration value', function(done){
       expect(function(){
         cache.set('foo', 'bar', 10000000)
           .then(function (result) {},
           function (err) {});
-      }).to.throw(assert.AssertionError);
+      }).to.throw(Error);
       done();
     });
+
   });
+
+  describe('mock rejections', function() {
+
+    Cache.__with__({
+      'Memcached': MockCacheRejected
+    })(function () {
+      var cacheRejected = new Cache();
+
+      it('get', function (done) {
+        cacheRejected.get('test')
+          .then(function (resp) {
+            throw new Error('Succeeded but expected fail');
+          }, function (err) {
+            done();
+          });
+      });
+
+      it('set', function (done) {
+        cacheRejected.set('test', 'this', 1000)
+          .then(function (resp) {
+            throw new Error('Succeeded but expected fail');
+          }, function (err) {
+            done();
+          });
+      });
+    });
+
+  });
+
 });

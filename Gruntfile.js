@@ -1,29 +1,19 @@
 'use strict';
 
-module.exports = function(grunt) {
-  require('load-grunt-tasks')(grunt);
+var path = require('path');
 
-  var istanbulCmd = {
-    bin: 'istanbul',
-    report: 'cobertura',
-    cover: '--x "" node_modules/mocha/bin/_mocha',
-    params: [
-      '--timeout 30000',
-      '--reporter spec'
-    ],
-    files: [
-      grunt.file.expand('tests/*.js').join(' ')
-    ],
-    construct: function () {
-      console.log("generating coverage information for files", this.files);
-      var cover = this.bin + ' cover ' + this.cover + ' -- ' + this.params.join(' ') + ' ' + this.files.join(' ');
-      var report = this.bin + ' report ' + this.report;
-      return cover + ' && ' + report;
-    }
-  };
+module.exports = function(grunt) {
+
+  require('load-grunt-tasks')(grunt);
+  require('time-grunt')(grunt);
 
   grunt.initConfig({
+
+    settings: {
+    },
+
     clean: {
+      docs: ['./docs'],
       node: ['./node_modules'],
       coverage: {
         src: ['./coverage']
@@ -31,9 +21,7 @@ module.exports = function(grunt) {
     },
 
     env: {
-      options: {},
-      istanbul: {
-        COVERAGE: 'istanbul'
+      options: {
       },
       test: {
         NODE_ENV: 'test'
@@ -51,31 +39,47 @@ module.exports = function(grunt) {
       },
       istanbul: {
         cmd: function () {
-          return istanbulCmd.construct();
+          var cover = 'istanbul cover --x "" node_modules/mocha/bin/_mocha -- --timeout 60000 --reporter spec tests/index.js';
+          var report = 'istanbul' + ' report ' + 'cobertura';
+          return cover + ' && ' + report;
+        }
+      },
+      mocha: {
+        cmd: function runMocha(xarg) {
+          var src = [];
+          var arg = xarg ? xarg.toLowerCase() : '';
+          if (arg === 'some-subtask'){
+            src = [ ];
+          } else {
+            src = [
+              'tests/*.js',
+              '!node_modules/**/*.js'
+            ];
+          }
+          var files = grunt.file.expand(src);
+          var bin = path.resolve(__dirname, './node_modules/.bin/mocha');
+          var options = ' --colors --harmony --reporter spec --timeout 20000 ';
+          var cmd = bin + options + files.join(' ');
+          console.log(cmd);
+          return cmd;
         }
       }
     },
-
-    cafemocha: {
-      options: {
-        reporter: (process.env.MOCHA_REPORTER || 'spec'),
-        timeout: 20000,
-        colors: true,
-        debug: true
-      },
-      all: {
-        src: ['tests/*.js',
-              '!node_modules/**/*.js']
+    jsdoc: {
+      dist: {
+        src: ['*.js', '!Gruntfile.js'],
+        options: {
+          destination: 'docs'
+        }
       }
     }
   });
 
+  grunt.registerTask('coverage', ['exec:flush', 'clean:coverage', 'env:test', 'exec:istanbul']);
+  grunt.registerTask('docs', [ 'clean:docs', 'jsdoc' ]);
   grunt.registerTask('test', 'Run Tests', function () {
-    var tasks = ['exec:flush', 'env:test', 'cafemocha:all'];
-    grunt.task.run(tasks);
+    grunt.task.run(['exec:flush', 'env:test', 'exec:mocha']);
   });
-
-  grunt.registerTask('coverage', ['exec:flush', 'clean:coverage', 'env:test', 'env:istanbul', 'exec:istanbul']);
 
   grunt.registerTask('default', ['test']);
 };
