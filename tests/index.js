@@ -2,6 +2,8 @@
 
 var expect = require('chai').expect;
 var rewire = require('rewire');
+const assert = require('assert');
+const _ = require('lodash');
 var Cache = rewire('../index.js');
 
 /*
@@ -24,9 +26,24 @@ describe('cache', function() {
     expect(cache).to.respondTo('getMulti');
     expect(cache).to.respondTo('set');
     expect(cache).to.respondTo('del');
+    expect(cache).to.respondTo('stats');
   });
 
   describe('execute methods', function() {
+
+
+    it ('should return stats response with non-zero number of items', function(done) {
+      cache.set('herp', 'derp', 20)
+          .then(function (setResult1) {
+            return cache.stats();
+          })
+          .then(function (stats) {
+            assert.ok(!_.isEmpty(stats));
+            assert.ok(_.get(stats, '0.total_items', 0) > 0);
+            done();
+          })
+    })
+
     it('should set/get something in the cache', function(done) {
       cache.set('foo', 'bar', 20)
         .then(function (setResult1) {

@@ -86,6 +86,24 @@ Cache.prototype.getMulti = function(keys) {
   return getPromise(this, 'getMulti', keys);
 };
 
+/***
+ * Gets stats result. 
+ * @returns {array} single-item array containing an object with a slew of key/values
+ */
+Cache.prototype.stats = function() {
+  var _this = this;
+  return new Promise(function (resolve, reject) {
+    _this._cache['stats'](function (err, data) {
+      if (err) {
+        reject(err);
+      }
+      else {
+        resolve(data);
+      }
+    });
+  });
+};
+
 /**
  * set an item in the cache
  * @param {string} key - cache key
