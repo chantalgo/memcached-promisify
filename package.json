@@ -17,8 +17,9 @@
   "author": "Chris Wood",
   "license": "ISC",
   "dependencies": {
-    "bluebird": "^2.9.34",
-    "lodash": "^3.10.1",
+    "lodash.assign": "^4.2.0",
+    "lodash.get": "^4.4.2",
+    "lodash.isempty": "^4.4.0",
     "memcached": "^2.1.0"
   },
   "devDependencies": {
