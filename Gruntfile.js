@@ -58,7 +58,7 @@ module.exports = function(grunt) {
           }
           var files = grunt.file.expand(src);
           var bin = path.resolve(__dirname, './node_modules/.bin/mocha');
-          var options = ' --colors --harmony --reporter spec --timeout 20000 ';
+          var options = ' --colors --reporter spec --timeout 20000 ';
           var cmd = bin + options + files.join(' ');
           console.log(cmd);
           return cmd;

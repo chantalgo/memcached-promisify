@@ -1,10 +1,7 @@
-'use strict';
+const _assign = require('lodash.assign');
+let Memcached = require('memcached');
 
-var Promise = require('bluebird');
-var _ = require('lodash');
-var Memcached = require('memcached');
-
-var MAX_EXPIRATION = 2592000;  // memcached's max exp in seconds (30 days)
+const MAX_EXPIRATION = 2592000;  // memcached's max exp in seconds (30 days)
 
 /**
  * Cache
@@ -19,7 +16,7 @@ var MAX_EXPIRATION = 2592000;  // memcached's max exp in seconds (30 days)
  *
  */
 function Cache(config, options) {
-  this.config = _.assign({
+  this.config = _assign({
     keyPrefix: '',
     cacheHost: 'localhost:11211'
   }, config);
@@ -37,21 +34,28 @@ function Cache(config, options) {
 }
 
 function getPromise(instance, method, key) {
-  return new Promise(function (resolve, reject) {
-    instance._cache[method](key, function (err, data) {
+  return new Promise((resolve, reject) => {
+    const cb = (err, data) => {
       if (err) {
         reject(err);
       }
       else {
         resolve(data);
       }
-    });
+    };
+
+    if (key) {
+      instance._cache[method](key, cb);
+    }
+    else {
+      instance._cache[method](cb);
+    }
   });
 }
 
 function setPromise(instance, key, value, expires) {
-  return new Promise(function (resolve, reject) {
-    instance._cache.set(key, value, expires, function (err, data) {
+  return new Promise((resolve, reject) => {
+    instance._cache.set(key, value, expires, (err, data) => {
       if (err) {
         reject(err);
       }
@@ -65,14 +69,16 @@ function setPromise(instance, key, value, expires) {
 /**
  * get a cache item
  * @param {string} key - cache key
+ * @returns {Promise}
  */
-Cache.prototype.get = function(key){
-  return getPromise(this, 'get', this.config.keyPrefix + key);
+Cache.prototype.get = function(key) {
+  return getPromise(this, 'get', `${this.config.keyPrefix}${key}`);
 };
 
 /**
  * get a cache item
  * @param {string} key - full prefixed cache key
+ * @returns {Promise}
  */
 Cache.prototype.utilGet = function(key) {
   return getPromise(this, 'get', key);
@@ -81,27 +87,18 @@ Cache.prototype.utilGet = function(key) {
 /**
  * get an object of cache items
  * @param {array} keys - an array of cache keys
+ * @returns {Promise}
  */
 Cache.prototype.getMulti = function(keys) {
   return getPromise(this, 'getMulti', keys);
 };
 
-/***
- * Gets stats result. 
- * @returns {array} single-item array containing an object with a slew of key/values
+/**
+ * gets stats from memcached server
+ * @returns {Promise}
  */
 Cache.prototype.stats = function() {
-  var _this = this;
-  return new Promise(function (resolve, reject) {
-    _this._cache['stats'](function (err, data) {
-      if (err) {
-        reject(err);
-      }
-      else {
-        resolve(data);
-      }
-    });
-  });
+  return getPromise(this, 'stats');
 };
 
 /**
@@ -109,6 +106,7 @@ Cache.prototype.stats = function() {
  * @param {string} key - cache key
  * @param {string|number|Object} data - data to set in cache
  * @param {number} [expires=900] - expiration of data in seconds
+ * @returns {Promise}
  */
 Cache.prototype.set = function(key, data, expires){
   if (expires > this.config.maxExpiration) {
@@ -121,6 +119,7 @@ Cache.prototype.set = function(key, data, expires){
 /**
  * delete an item in the cache
  * @param {string} key - cache key
+ * @returns {Promise}
  */
 Cache.prototype.del = function(key) {
   return getPromise(this, 'del', this.config.keyPrefix + key);
