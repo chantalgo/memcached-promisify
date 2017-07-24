@@ -1,16 +1,16 @@
-# memcached-promisify
+# memcached-promisify-timestamp
 
-Memcached promisified wrapper library
+Fork of [memcached-promisify](https://github.com/flightstats/memcached-promisify) Memcached promisified wrapper library that allows setting for timestamps in expiration date
 
 ## installation
 
 ```shell
-npm install memcached-promisify --save
+npm install memcached-promisify-timestamp --save
 ```
 
 ## usage
 ```shell
-const Cache = require('memcached-promisify');
+const Cache = require('memcached-promisify-timestamp');
 
 const cache = new Cache();
 

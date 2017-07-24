@@ -1,6 +1,6 @@
 {
-  "name": "memcached-promisify",
-  "version": "2.0.0",
+  "name": "memcached-promisify-timestamp",
+  "version": "1.0.3",
   "description": "Memcached promisified wrapper library",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "http://github.com/flightstats/memcached-promisify"
+    "url": "https://github.com/chantalgo/memcached-promisify"
   },
   "author": "Chris Wood",
   "license": "ISC",
