@@ -125,9 +125,9 @@ describe('cache', () => {
         });
     });
 
-    it('should limit the expiration value', (done) => {
+    it('Expiration value should be seconds or a timestamp', (done) => {
       expect(() => {
-        cache.set('foo', 'bar', 10000000)
+        cache.set('foo', 'bar', 'test')
           .then(function (result) {},
           function (err) {});
       }).to.throw(Error);

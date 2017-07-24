@@ -23,13 +23,6 @@ function Cache(config, options) {
 
   options = options || {};
 
-  if (!options.hasOwnProperty('maxExpiration')) {
-    options.maxExpiration = MAX_EXPIRATION;
-  }
-
-  this.config.maxExpiration = options.maxExpiration;
-
-  console.log('creating memcached instance for cache host:', this.config.cacheHost);
   this._cache = new Memcached(this.config.cacheHost, options);
 }
 
@@ -109,8 +102,8 @@ Cache.prototype.stats = function() {
  * @returns {Promise}
  */
 Cache.prototype.set = function(key, data, expires){
-  if (expires > this.config.maxExpiration) {
-    throw new Error('Cache.set: Expiration must be no greater than ' + this.config.maxExpiration + ' seconds.');
+  if ((new Date(expires * 1000).getTime() !== new Date(expires * 1000).getTime())){
+    throw new Error('Cache.set: Expiration must be seconds or timestamp');
   }
 
   return setPromise(this, this.config.keyPrefix + key, data, expires);
