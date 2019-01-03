@@ -118,4 +118,11 @@ Cache.prototype.del = function(key) {
   return getPromise(this, 'del', this.config.keyPrefix + key);
 };
 
+/**
+ * kill all connections
+ */
+Cache.prototype.end = function() {
+  this._cache.end();
+};
+
 module.exports = Cache;
